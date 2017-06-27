@@ -1,0 +1,46 @@
+c:\users\usuario\documents\visual studio 2012\Projects\pruebaaccess\pruebaaccess\bin\Debug\pruebaaccess.exe.config
+c:\users\usuario\documents\visual studio 2012\Projects\pruebaaccess\pruebaaccess\bin\Debug\pruebaaccess.exe
+c:\users\usuario\documents\visual studio 2012\Projects\pruebaaccess\pruebaaccess\bin\Debug\pruebaaccess.pdb
+c:\users\usuario\documents\visual studio 2012\Projects\pruebaaccess\pruebaaccess\obj\Debug\pruebaaccess.csprojResolveAssemblyReference.cache
+c:\users\usuario\documents\visual studio 2012\Projects\pruebaaccess\pruebaaccess\obj\Debug\pruebaaccess.Properties.Resources.resources
+c:\users\usuario\documents\visual studio 2012\Projects\pruebaaccess\pruebaaccess\obj\Debug\pruebaaccess.csproj.GenerateResource.Cache
+c:\users\usuario\documents\visual studio 2012\Projects\pruebaaccess\pruebaaccess\obj\Debug\pruebaaccess.exe
+c:\users\usuario\documents\visual studio 2012\Projects\pruebaaccess\pruebaaccess\obj\Debug\pruebaaccess.pdb
+C:\Users\usuario\documents\visual studio 2012\Projects\pruebaaccess\pruebaaccess\obj\Debug\pruebaaccess.Inicio.resources
+C:\Users\usuario\documents\visual studio 2012\Projects\pruebaaccess\pruebaaccess\obj\Debug\pruebaaccess.PedidosSalidas.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia\pruebaaccess\bin\Debug\pruebaaccess.exe.config
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia\pruebaaccess\obj\Debug\pruebaaccess.exe
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia\pruebaaccess\obj\Debug\pruebaaccess.pdb
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia\pruebaaccess\bin\Debug\pruebaaccess.exe
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia\pruebaaccess\bin\Debug\pruebaaccess.pdb
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia\pruebaaccess\obj\Debug\pruebaaccess.csprojResolveAssemblyReference.cache
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia\pruebaaccess\obj\Debug\pruebaaccess.Inicio.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia\pruebaaccess\obj\Debug\pruebaaccess.PedidosSalidas.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia\pruebaaccess\obj\Debug\pruebaaccess.Properties.Resources.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia\pruebaaccess\obj\Debug\pruebaaccess.csproj.GenerateResource.Cache
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\bin\Debug\pruebaaccess.exe.config
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.exe
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.pdb
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.csprojResolveAssemblyReference.cache
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.Inicio.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.PedidosSalidas.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.Properties.Resources.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.csproj.GenerateResource.Cache
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\bin\Debug\pruebaaccess.exe
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\bin\Debug\pruebaaccess.pdb
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.InventarioTeorico.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\bin\Debug\pruebaaccess.exe.config
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.exe
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.pdb
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\bin\Debug\pruebaaccess.exe
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\bin\Debug\pruebaaccess.pdb
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.csprojResolveAssemblyReference.cache
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.Inicio.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.InventarioTeorico.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.PedidosSalidas.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.Properties.Resources.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.csproj.GenerateResource.Cache
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.EmpaqueEntradas.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.EmpaqueSalidas.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.AgenteEntradas.resources
+C:\Users\usuario\Documents\Visual Studio 2012\Projects\pruebaaccess - copia - copia - copia\pruebaaccess\obj\Debug\pruebaaccess.AgenteSalidas.resources
