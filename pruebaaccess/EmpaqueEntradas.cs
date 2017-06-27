@@ -284,7 +284,7 @@ namespace pruebaaccess
         {/////////ME QUEDE AQUIIIIIIIIII////////
             try
             {
-                using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
+                using (OleDbConnection conect = new OleDbConnection(EmpaqueEntradas.cadConex))
                 {
                     conect.Open();
                     cmd = conect.CreateCommand();
@@ -295,7 +295,9 @@ namespace pruebaaccess
                     comboBox1.Enabled = true;
                     comboBox2.Enabled = true;
                     textBox3.Text = "0";
+                    textBox4.Text = "0";
                     textBox5.Text = "0.00";
+                    textBox6.Text = "0.00";
                     textBox7.Text = "0.00";                    
 
                     //OBTIENE LA FECHA ACTUAL//
@@ -317,7 +319,7 @@ namespace pruebaaccess
                     reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        comboBox1.Items.Add(Convert.ToString(reader.GetValue(0)));
+                        comboBox2.Items.Add(Convert.ToString(reader.GetValue(0)));
                     }                    
                 }
             }
@@ -333,8 +335,8 @@ namespace pruebaaccess
         public int ObtenerClaveNueva()
         {
             try
-            {                
-                cmd.CommandText = "SELECT TOP 1 IdSAPTPedidos FROM [APT-Pedidos Salidas] ORDER BY IdSAPTPedidos desc;";
+            {
+                cmd.CommandText = "SELECT TOP 1 IdEAPT FROM [APT-Empaque Entradas] ORDER BY IdEAPT desc;";
                 reader = cmd.ExecuteReader();
                 reader.Read();
                 int val = Convert.ToInt32(reader.GetValue(0));                
@@ -354,7 +356,7 @@ namespace pruebaaccess
         {
             try
             {
-                using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
+                using (OleDbConnection conect = new OleDbConnection(EmpaqueEntradas.cadConex))
                 {
                     cmd = conect.CreateCommand();
                     cmd.CommandText = "SELECT [Tipos de Cajas].descripcióntipocaja, [Tipos de Cajas].pesocaja from [Tipos de Cajas]";
@@ -382,9 +384,9 @@ namespace pruebaaccess
         {
             try
             {
-                using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
+                using (OleDbConnection conect = new OleDbConnection(EmpaqueEntradas.cadConex))
                 {
-                    guardarSalidaPedido(conect);
+                    guardarEntradaEmpaque(conect);
                     //PREGUNTA SI ESTA SEGURO QUE DESEA GUARDAR//
                     DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
                     //SI LA RESPUESTA ES SI, HACE UN COMMIT//
@@ -394,7 +396,8 @@ namespace pruebaaccess
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Insertado con éxito");
                         comboBox1.Enabled = false;
-                        comboBox2.Enabled = false;                        
+                        comboBox2.Enabled = false;
+                        
                         dataGridView1.ReadOnly = true;
                                                
 
@@ -408,13 +411,12 @@ namespace pruebaaccess
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: "+ ex.Message);
-                throw;
+                MessageBox.Show("Error: "+ ex.Message);                
             }
         }
 
         //MÉTODO GUARDAR, INICIA LA TRANSACCIÓN PARA GUARDAR LOS DATOS DE LA ENTRADA//
-        public void guardarSalidaPedido(OleDbConnection conect)
+        public void guardarEntradaEmpaque(OleDbConnection conect)
         {
             try
             {
@@ -449,7 +451,7 @@ namespace pruebaaccess
                 //{
 
                 //REALIZA LA CONSULTA PARA INSERTAR EL ENCABEZADO DE LA ENTRADA//
-                    cmd.CommandText = "insert into [APT-Pedidos Salidas](idsaptpedidos, FechaSAPTPedidos, usuariorecibiósaptpedidos, usuarioentregósaptpedidos) values (@claveencabezado, @fechaencabezado, @usuariorecibio, @usuarioentrego)";
+                    cmd.CommandText = "insert into [APT-Empaque Entradas](IdEAPT, FechaEAPT, UsuarioRecibioEAPT, usuarioentregoeapt) values (@claveencabezado, @fechaencabezado, @usuariorecibio, @usuarioentrego)";
                     //cmd.CommandText = "SELECT Nombre, ApellidoPaterno FROM Agentes WHERE (((IdAgente)=[@name]));";
                     cmd.Parameters.AddWithValue("@claveencabezado", idencabezado);
                     cmd.Parameters.AddWithValue("@fechaencabezado", FechaSAPTPedidos);
@@ -488,26 +490,28 @@ namespace pruebaaccess
                     //MessageBox.Show("HOLA " + IdTipoCajaSAPTPedidos);
                     int NumeroDeCajasSAPTPedidos = Convert.ToInt32(fila.Cells[6].Value.ToString().Trim());
                     Double pesobruto = Convert.ToDouble(fila.Cells[7].Value.ToString().Trim());
+                    Double pesocajas = Convert.ToDouble(fila.Cells[8].Value.ToString().Trim());
 
 
                         
                     //REALIZA LA CONSULTA PARA INSERTAR LOS DETALLES DE LA ENTRADA//
-                    cmd.CommandText = "insert into [Detalle APT-Pedidos Salidas](idsaptpedidos, idsubproductosaptpedidos, pesobrutosaptpedidos, idtipocajasaptpedidos, " + ""
-                    + "númerodecajassaptpedidos, piezassaptpedidos, idlotecaducidadpedidos, fechacaducidadsaptpedidos) values(@detalleclave, @detalleclavepro, @detallepesobruto, " + ""
-                    + "@detalleidcaja, @detallenumcaja, @detallepiezas, @detalleidlote, @detallefechacad)";
+                    cmd.CommandText = "insert into [Detalle APT-Empaque Entradas](IdEAPT, idsubproducto, pesobrutoeapt, idtipocaja, "
+                    + "númerodecajas, piezasrecibidaseapt, tara, idlotecaducidad, fechacaducidad) values(@detalleclave, @detalleclavepro, @detallepesobruto, "
+                    + "@detalleidcaja, @detallenumcaja, @detallepiezas, @detalletara, @detalleidlote, @detallefechacad)";
                     cmd.Parameters.AddWithValue("@detalleclave", idencabezado);
                     cmd.Parameters.AddWithValue("@detalleclavepro", IdSubProductoSAPTPedidos);
                     cmd.Parameters.AddWithValue("@detallepesobruto", pesobruto);
                     cmd.Parameters.AddWithValue("@detalleidcaja", IdTipoCajaSAPTPedidos);
                     cmd.Parameters.AddWithValue("@detallenumcaja", NumeroDeCajasSAPTPedidos);
                     cmd.Parameters.AddWithValue("@detallepiezas", PiezasSAPTPedidos);
+                    cmd.Parameters.AddWithValue("@detalletara", pesocajas);
                     cmd.Parameters.AddWithValue("@detalleidlote", IdLoteCaducidadPedidos);
                     cmd.Parameters.AddWithValue("@detallefechacad", FechaCaducidadSAPTPedidos);
                     cmd.ExecuteNonQuery();
                     cmd.Parameters.Clear();
 
                     //SI EXISTE, ACTUALIZA LA COLUMNA DE EMPAQUEENTRADASKG PARA TENER LAS EXISTENCIAS AL DÍA//
-                    cmd.CommandText = "update [detalle existencias apt] set salidaspedidoskg = salidaspedidoskg + @pesobruto where " +
+                    cmd.CommandText = "update [detalle existencias apt] set entradasempaquekg = entradasempaquekg + @pesobruto where " +
                         "idexistenciaapt = @idExist AND idsubproducto = @idsubprod";
                     cmd.Parameters.AddWithValue("@pesobruto",pesobruto);
                     cmd.Parameters.AddWithValue("@idExist", idExistencia);
@@ -546,6 +550,27 @@ namespace pruebaaccess
             return idcaja;
         }
 
+        public Double EvaluarPesoTipoCaja(String TipoCaja)
+        {
+            Double pesocaja = 0;
+            if (TipoCaja.Contains("Sin caja")){
+                pesocaja = 0.0;
+            }else if (TipoCaja.Contains("Chica pvc")){
+                pesocaja = 1.2;
+            }else if (TipoCaja.Contains("Grande pvc")){
+                pesocaja = 1.7;
+            }else if (TipoCaja.Contains("Almac.chica pvc")){
+                pesocaja = 2.2;
+            }else if (TipoCaja.Contains("Almac.grande pvc")){
+                pesocaja = 3.8;
+            }else if (TipoCaja.Contains("Bote p/vinagre")){
+                pesocaja = 0;
+            }else if (TipoCaja.Contains("~Garrafa p/vinagre")){
+                pesocaja = 0;
+            }
+            return pesocaja;
+        }
+
         private void dataGridView1_KeyPress(object sender, KeyPressEventArgs e)
         {
 
@@ -569,6 +594,8 @@ namespace pruebaaccess
                         totalpiezas = 0;
                         totalpesobruto = 0;
                         totalpesoneto = 0;
+                        totalcajas = 0;
+                        totalpesocajas = 0;
                         //int cont = 0;
 
                         //RECORRE EL GRID PARA SACAR LOS CAMPOS CALCULADOS//
@@ -584,8 +611,14 @@ namespace pruebaaccess
                             Double piezasacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[4].Value);
                             totalpiezas = totalpiezas + piezasacum;
 
+                            Double cajasacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[6].Value);
+                            totalcajas = totalcajas + cajasacum;
+
                             Double pesobrutoacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[7].Value);
                             totalpesobruto = totalpesobruto + pesobrutoacum;
+
+                            Double pesocajasacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[8].Value);
+                            totalpesocajas = totalpesocajas + pesocajasacum;
 
                             Double pesonetoacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[9].Value);
                             totalpesoneto = totalpesoneto + pesonetoacum;
@@ -596,7 +629,9 @@ namespace pruebaaccess
                         }
                         //MUESTRA LOS TOTALES PARCIALES//
                         textBox3.Text = totalpiezas.ToString();
+                        textBox4.Text = totalcajas.ToString();
                         textBox5.Text = totalpesobruto.ToString();
+                        textBox6.Text = totalpesocajas.ToString();
                         textBox7.Text = totalpesoneto.ToString();
 
 
@@ -621,7 +656,7 @@ namespace pruebaaccess
             {
                 dataGridView1.Columns[1].ReadOnly = true;
 
-                using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
+                using (OleDbConnection conect = new OleDbConnection(EmpaqueEntradas.cadConex))
                 {
                     SendKeys.Send("{UP}");
                     SendKeys.Send("{RIGHT}");
@@ -718,22 +753,30 @@ namespace pruebaaccess
                             //OBTIENE EL VALOR DE LA CELDA DE PIEZAS DE LA FILA ACTUAL//
                             Double piezas = Convert.ToDouble(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex - 3].Value);
                             //OBTIENE EL VALOR DE LA CELDA DE PESONETO DE LA FILA ACTUAL//
-                            Double pesoneto = Convert.ToDouble(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
+                            //Double pesoneto = Convert.ToDouble(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
                             //?????//
-                            dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 1].Value = 0;
-                            dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 2].Value = pesoneto;
+                            //dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 1].Value = 0;
+                            //dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 2].Value = pesoneto;
                             SendKeys.Send("{RIGHT}");
                             SendKeys.Send("{RIGHT}");
-                            
+
+                            Double cajas = Convert.ToDouble(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex-1].Value);
+                            Double pesocaja = EvaluarPesoTipoCaja(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex-2].Value.ToString());
+                            Double tara = cajas*pesocaja;
+                            dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 1].Value = tara;
+
+                            dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 2].Value = Convert.ToDouble(pesobruto) - tara;
+                            Double pesonet = Convert.ToDouble(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 2].Value);
+
                             if (piezas == 0)
                             {
-                                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 3].Value = pesoneto;
+                                dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 3].Value = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 2].Value;
                                 SendKeys.Send("{RIGHT}");
 
                             }
                             else if (piezas != 0)
                             {
-                                Double pesopromedio = pesoneto / piezas;
+                                Double pesopromedio = pesonet / piezas;
                                 dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex + 3].Value = pesopromedio;
                                 SendKeys.Send("{RIGHT}");
 
@@ -761,7 +804,7 @@ namespace pruebaaccess
         {
             try
             {
-                using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
+                using (OleDbConnection conect = new OleDbConnection(EmpaqueEntradas.cadConex))
                 {
                     cmd = conect.CreateCommand();
                     //CONSULTA PARA OBTENER EL NOMBRE DEL PRODUCTO BUSCADO POR ID//
@@ -834,7 +877,7 @@ namespace pruebaaccess
             try
             {
                 dataGridView1.Columns[1].ReadOnly = true;
-                using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
+                using (OleDbConnection conect = new OleDbConnection(EmpaqueEntradas.cadConex))
                 {
                     if (e.ColumnIndex > -1)
                     {
