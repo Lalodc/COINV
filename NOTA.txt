@@ -1,3 +1,7 @@
 Proyecto con:
 *Cadena conexion desde App.config
 *Inventario teorico completo (desde 2012)
+
+
+ruta bd toshiba: C:\Users\Public\Documents\Sipe\Datoscopia.mdb
+ruta db hp: C:\Users\Usuario\Documents\Sipe\Datoscopia.mdb
