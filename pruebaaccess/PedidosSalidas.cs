@@ -214,6 +214,7 @@ namespace pruebaaccess
             {
                 if (e.KeyChar == Convert.ToChar(Keys.Enter))
                 {
+                    button2.Enabled = false;
                     Regex Val = new Regex(@"^[+-]?\d+(\\d+)?$");
                     //Regex Val = new Regex(@"^[+-]?\d+(\.\d+)?$");
                     if(Val.IsMatch(textBox1.Text))
@@ -474,6 +475,7 @@ namespace pruebaaccess
                     conect.Open();
                     cmd = conect.CreateCommand();
                     //detalle_APT_Pedidos_SalidasDataGridView.Columns.Remove(detalle_APT_Pedidos_SalidasDataGridView.Columns[5]);
+                    button2.Enabled = true;
                     textBox2.Text = "";
                     comboBox1.Text = "[Selecciona]";
                     comboBox2.Text = "[Selecciona]";
@@ -595,11 +597,17 @@ namespace pruebaaccess
             try
             {
                 using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
-                {                
-                    guardarSalidaPedido(conect);
-                    DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
-                    //using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
-                    //{
+                {
+                    if (comboBox1.Text == "" || comboBox1.Text == "[Selecciona]" || comboBox2.Text == "" || comboBox2.Text == "[Selecciona]")
+                    {
+                        MessageBox.Show("Ingrese datos válidos en el encabezado");
+                    }
+                    else
+                    {
+                        guardarSalidaPedido(conect);
+                        DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
+                        //using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
+                        //{
                         if (dialog == DialogResult.Yes)
                         {
                             //conect.Open();
@@ -612,7 +620,7 @@ namespace pruebaaccess
                             comboBox2.Enabled = false;
                             //detalle_APT_Pedidos_SalidasDataGridView.Enabled = false;
                             detalle_APT_Pedidos_SalidasDataGridView.ReadOnly = true;
-                            
+
 
                             //foreach (DataGridViewRow fila in detalle_APT_Pedidos_SalidasDataGridView.Rows)
                             //{
@@ -632,10 +640,11 @@ namespace pruebaaccess
                         }
                         else if (dialog == DialogResult.No)
                         {
-                            cmd = new OleDbCommand("ROLLBACK", conect);        
+                            cmd = new OleDbCommand("ROLLBACK", conect);
                             //cmd.CommandText = "ROLLBACK";
                             cmd.ExecuteNonQuery();
                         }
+                    }
                         //}
 
                 
@@ -644,8 +653,7 @@ namespace pruebaaccess
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: "+ ex.Message);
-                throw;
+                MessageBox.Show("Error: "+ ex.Message);                
             }   
         }        
 

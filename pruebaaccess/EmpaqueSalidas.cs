@@ -103,6 +103,7 @@ namespace pruebaaccess
             {
                 if (e.KeyChar == Convert.ToChar(Keys.Enter))
                 {
+                    button2.Enabled = false;
                     Regex Val = new Regex(@"^[+-]?\d+(\\d+)?$");
                     if (Val.IsMatch(textBox1.Text))
                     {
@@ -281,6 +282,7 @@ namespace pruebaaccess
                     conect.Open();
                     cmd = conect.CreateCommand();
                     //LIMPIA LOS CAMPOS//
+                    button2.Enabled = true;
                     textBox2.Text = "";
                     comboBox1.Text = "[Selecciona]";
                     comboBox2.Text = "[Selecciona]";
@@ -381,27 +383,47 @@ namespace pruebaaccess
             {
                 using (OleDbConnection conect = new OleDbConnection(EmpaqueSalidas.cadConex))
                 {
-                    guardarSalidaEmpaque(conect);
-                    //PREGUNTA SI ESTA SEGURO QUE DESEA GUARDAR//
-                    DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
-                    //SI LA RESPUESTA ES SI, HACE UN COMMIT//
-                    if (dialog == DialogResult.Yes)
+
+                    if (comboBox1.Text == "" || comboBox1.Text == "[Selecciona]" || comboBox2.Text == "" || comboBox2.Text == "[Selecciona]")
                     {
-                        cmd = new OleDbCommand("COMMIT", conect);
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Insertado con éxito");
-                        comboBox1.Enabled = false;
-                        comboBox2.Enabled = false;
-
-                        dataGridView1.ReadOnly = true;
-
-
-                    }//SI LA RESPUESTA ES NO, HACE UN ROLLBACK Y NO INSERTA NADA//
-                    else if (dialog == DialogResult.No)
-                    {
-                        cmd = new OleDbCommand("ROLLBACK", conect);
-                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Ingrese datos válidos en el encabezado");
                     }
+                    else
+                    {
+                        Boolean EGrid = celdasNullEnDataGridView();
+                        if (EGrid == true)
+                        {
+                            guardarSalidaEmpaque(conect);
+                            //PREGUNTA SI ESTA SEGURO QUE DESEA GUARDAR//
+                            DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
+                            //SI LA RESPUESTA ES SI, HACE UN COMMIT//
+                            if (dialog == DialogResult.Yes)
+                            {
+                                cmd = new OleDbCommand("COMMIT", conect);
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Insertado con éxito");
+                                comboBox1.Enabled = false;
+                                comboBox2.Enabled = false;
+
+                                dataGridView1.ReadOnly = true;
+
+
+                            }//SI LA RESPUESTA ES NO, HACE UN ROLLBACK Y NO INSERTA NADA//
+                            else if (dialog == DialogResult.No)
+                            {
+                                cmd = new OleDbCommand("ROLLBACK", conect);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ingrese datos válidos en la grid");
+                        }
+                        
+                    }
+
+
+                    
                 }
             }
             catch (Exception ex)
@@ -441,6 +463,28 @@ namespace pruebaaccess
                 String UsuarioEntregoSAPTPedidos = comboBox1.Text.Trim();
                 String UsuarioRecibioSAPTPedidos = comboBox2.Text.Trim();
 
+                //try 
+                //{
+                  //  if (UsuarioEntregoSAPTPedidos != "" && UsuarioEntregoSAPTPedidos != "[Selecciona]" && UsuarioRecibioSAPTPedidos != "" && UsuarioRecibioSAPTPedidos != "[Selecciona]")
+                    //{
+                        cmd.CommandText = "insert into [APT-Empaque Salidas](IdSAPT, FechaSAPT, UsuarioRecibióSAPT, usuarioentregóSAPT) values (@claveencabezado, @fechaencabezado, @usuariorecibio, @usuarioentrego)";
+                        //cmd.CommandText = "SELECT Nombre, ApellidoPaterno FROM Agentes WHERE (((IdAgente)=[@name]));";
+                        cmd.Parameters.AddWithValue("@claveencabezado", idencabezado);
+                        cmd.Parameters.AddWithValue("@fechaencabezado", FechaSAPTPedidos);
+                        cmd.Parameters.AddWithValue("@usuariorecibio", UsuarioRecibioSAPTPedidos);
+                        cmd.Parameters.AddWithValue("@usuarioentrego", UsuarioEntregoSAPTPedidos);
+                        cmd.ExecuteNonQuery();
+                        cmd.Parameters.Clear();
+                        
+                    //}
+                //}
+                //catch (Exception)
+                //{
+                //    MessageBox.Show("Ingrese datos válidos en el encabezado");
+                //    throw;
+                //}
+                
+
 
 
                 ////EDITANDO AQUI/////
@@ -449,14 +493,14 @@ namespace pruebaaccess
                 //{
 
                 //REALIZA LA CONSULTA PARA INSERTAR EL ENCABEZADO DE LA SALIDA//
-                cmd.CommandText = "insert into [APT-Empaque Salidas](IdSAPT, FechaSAPT, UsuarioRecibióSAPT, usuarioentregóSAPT) values (@claveencabezado, @fechaencabezado, @usuariorecibio, @usuarioentrego)";
-                //cmd.CommandText = "SELECT Nombre, ApellidoPaterno FROM Agentes WHERE (((IdAgente)=[@name]));";
-                cmd.Parameters.AddWithValue("@claveencabezado", idencabezado);
-                cmd.Parameters.AddWithValue("@fechaencabezado", FechaSAPTPedidos);
-                cmd.Parameters.AddWithValue("@usuariorecibio", UsuarioRecibioSAPTPedidos);
-                cmd.Parameters.AddWithValue("@usuarioentrego", UsuarioEntregoSAPTPedidos);
-                cmd.ExecuteNonQuery();
-                cmd.Parameters.Clear();
+                //cmd.CommandText = "insert into [APT-Empaque Salidas](IdSAPT, FechaSAPT, UsuarioRecibióSAPT, usuarioentregóSAPT) values (@claveencabezado, @fechaencabezado, @usuariorecibio, @usuarioentrego)";
+                ////cmd.CommandText = "SELECT Nombre, ApellidoPaterno FROM Agentes WHERE (((IdAgente)=[@name]));";
+                //cmd.Parameters.AddWithValue("@claveencabezado", idencabezado);
+                //cmd.Parameters.AddWithValue("@fechaencabezado", FechaSAPTPedidos);
+                //cmd.Parameters.AddWithValue("@usuariorecibio", UsuarioRecibioSAPTPedidos);
+                //cmd.Parameters.AddWithValue("@usuarioentrego", UsuarioEntregoSAPTPedidos);
+                //cmd.ExecuteNonQuery();
+                //cmd.Parameters.Clear();
                 //}
                 //else
                 //{
@@ -524,6 +568,33 @@ namespace pruebaaccess
                 MessageBox.Show("Existe un error con esta clave");
                 throw;
             }
+        }
+        ///ME QUEDÉ AQUÍ///
+        private bool celdasNullEnDataGridView()
+        {
+            bool bVacia = false;
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                int cont = dataGridView1.Rows.Count;
+                if (row.Index == cont - 1)
+                {
+                    break;
+                }
+                if
+                    (string.IsNullOrEmpty(row.Cells[0].FormattedValue.ToString()) ||
+                     string.IsNullOrEmpty(row.Cells[1].FormattedValue.ToString()) ||
+                     string.IsNullOrEmpty(row.Cells[2].FormattedValue.ToString()) ||
+                     string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString()) ||
+                     string.IsNullOrEmpty(row.Cells[4].FormattedValue.ToString()) ||
+                     string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()) ||
+                     string.IsNullOrEmpty(row.Cells[6].FormattedValue.ToString()) ||
+                     string.IsNullOrEmpty(row.Cells[7].FormattedValue.ToString()) ||
+                     string.IsNullOrEmpty(row.Cells[8].FormattedValue.ToString()) ||
+                     string.IsNullOrEmpty(row.Cells[9].FormattedValue.ToString()) ||
+                     string.IsNullOrEmpty(row.Cells[10].FormattedValue.ToString()))
+                { bVacia = true; }
+            }
+            return bVacia;
         }
 
 

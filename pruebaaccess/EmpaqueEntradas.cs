@@ -103,6 +103,7 @@ namespace pruebaaccess
             {
                 if (e.KeyChar == Convert.ToChar(Keys.Enter))
                 {
+                    button2.Enabled = false;
                     Regex Val = new Regex(@"^[+-]?\d+(\\d+)?$");
                     if (Val.IsMatch(textBox1.Text))
                     {
@@ -289,6 +290,7 @@ namespace pruebaaccess
                     conect.Open();
                     cmd = conect.CreateCommand();
                     //LIMPIA LOS CAMPOS//
+                    button2.Enabled = true;
                     textBox2.Text = "";
                     comboBox1.Text = "[Selecciona]";
                     comboBox2.Text = "[Selecciona]";
@@ -386,27 +388,34 @@ namespace pruebaaccess
             {
                 using (OleDbConnection conect = new OleDbConnection(EmpaqueEntradas.cadConex))
                 {
-                    guardarEntradaEmpaque(conect);
-                    //PREGUNTA SI ESTA SEGURO QUE DESEA GUARDAR//
-                    DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
-                    //SI LA RESPUESTA ES SI, HACE UN COMMIT//
-                    if (dialog == DialogResult.Yes)
-                    {                        
-                        cmd = new OleDbCommand("COMMIT", conect);                        
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Insertado con éxito");
-                        comboBox1.Enabled = false;
-                        comboBox2.Enabled = false;
-                        
-                        dataGridView1.ReadOnly = true;
-                                               
-
-                    }//SI LA RESPUESTA ES NO, HACE UN ROLLBACK Y NO INSERTA NADA//
-                    else if (dialog == DialogResult.No)
+                    if (comboBox1.Text == "" || comboBox1.Text == "[Selecciona]" || comboBox2.Text == "" || comboBox2.Text == "[Selecciona]")
                     {
-                        cmd = new OleDbCommand("ROLLBACK", conect);                        
-                        cmd.ExecuteNonQuery();
-                    }                    
+                        MessageBox.Show("Ingrese datos válidos en el encabezado");
+                    }
+                    else
+                    {
+                        guardarEntradaEmpaque(conect);
+                        //PREGUNTA SI ESTA SEGURO QUE DESEA GUARDAR//
+                        DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
+                        //SI LA RESPUESTA ES SI, HACE UN COMMIT//
+                        if (dialog == DialogResult.Yes)
+                        {
+                            cmd = new OleDbCommand("COMMIT", conect);
+                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Insertado con éxito");
+                            comboBox1.Enabled = false;
+                            comboBox2.Enabled = false;
+
+                            dataGridView1.ReadOnly = true;
+
+
+                        }//SI LA RESPUESTA ES NO, HACE UN ROLLBACK Y NO INSERTA NADA//
+                        else if (dialog == DialogResult.No)
+                        {
+                            cmd = new OleDbCommand("ROLLBACK", conect);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
