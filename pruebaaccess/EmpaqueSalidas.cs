@@ -391,7 +391,7 @@ namespace pruebaaccess
                     else
                     {
                         Boolean EGrid = celdasNullEnDataGridView();
-                        if (EGrid == true)
+                        if (EGrid == false)
                         {
                             guardarSalidaEmpaque(conect);
                             //PREGUNTA SI ESTA SEGURO QUE DESEA GUARDAR//
@@ -573,27 +573,35 @@ namespace pruebaaccess
         private bool celdasNullEnDataGridView()
         {
             bool bVacia = false;
-            foreach (DataGridViewRow row in dataGridView1.Rows)
+            if (dataGridView1.Rows.Count > 1)
             {
-                int cont = dataGridView1.Rows.Count;
-                if (row.Index == cont - 1)
+                foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    break;
+                    int cont = dataGridView1.Rows.Count;
+                    if (row.Index == cont - 1)
+                    {
+                        break;
+                    }
+                    if
+                        (string.IsNullOrEmpty(row.Cells[0].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[1].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[2].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[4].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[6].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[7].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[8].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[9].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[10].FormattedValue.ToString()))
+                    { bVacia = true; }
                 }
-                if
-                    (string.IsNullOrEmpty(row.Cells[0].FormattedValue.ToString()) ||
-                     string.IsNullOrEmpty(row.Cells[1].FormattedValue.ToString()) ||
-                     string.IsNullOrEmpty(row.Cells[2].FormattedValue.ToString()) ||
-                     string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString()) ||
-                     string.IsNullOrEmpty(row.Cells[4].FormattedValue.ToString()) ||
-                     string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()) ||
-                     string.IsNullOrEmpty(row.Cells[6].FormattedValue.ToString()) ||
-                     string.IsNullOrEmpty(row.Cells[7].FormattedValue.ToString()) ||
-                     string.IsNullOrEmpty(row.Cells[8].FormattedValue.ToString()) ||
-                     string.IsNullOrEmpty(row.Cells[9].FormattedValue.ToString()) ||
-                     string.IsNullOrEmpty(row.Cells[10].FormattedValue.ToString()))
-                { bVacia = true; }
             }
+            else
+            {
+                bVacia = true;
+            }
+            
             return bVacia;
         }
 

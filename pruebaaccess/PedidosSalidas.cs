@@ -604,45 +604,53 @@ namespace pruebaaccess
                     }
                     else
                     {
-                        guardarSalidaPedido(conect);
-                        DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
-                        //using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
-                        //{
-                        if (dialog == DialogResult.Yes)
+                        Boolean EGrid = celdasNullEnDataGridView();
+                        if (EGrid == false)
                         {
-                            //conect.Open();
-                            //conect.CreateCommand();
-                            cmd = new OleDbCommand("COMMIT", conect);
-                            //cmd.CommandText = "COMMIT";
-                            cmd.ExecuteNonQuery();
-                            MessageBox.Show("Insertado con éxito");
-                            comboBox1.Enabled = false;
-                            comboBox2.Enabled = false;
-                            //detalle_APT_Pedidos_SalidasDataGridView.Enabled = false;
-                            detalle_APT_Pedidos_SalidasDataGridView.ReadOnly = true;
-
-
-                            //foreach (DataGridViewRow fila in detalle_APT_Pedidos_SalidasDataGridView.Rows)
+                            guardarSalidaPedido(conect);
+                            DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
+                            //using (OleDbConnection conect = new OleDbConnection(PedidosSalidas.cadConex))
                             //{
-                            //    String clave = fila.Cells[0].Value.ToString().Trim();
-                            //    //String producto = fila.Cells[1].Value.ToString().Trim();
-                            //    String lote = fila.Cells[2].Value.ToString().Trim();
-                            //    String caducidad = fila.Cells[3].Value.ToString().Trim();
-                            //    int piezas = Convert.ToInt32(fila.Cells[4].Value);
-                            //    int tipocaja = Convert.ToInt32(fila.Cells[5].Value);
-                            //    int cajas = Convert.ToInt32(fila.Cells[5].Value);
-                            //    Double pesobruto = Convert.ToDouble(fila.Cells[6].Value);
-                            //    //Double pesocajas;
-                            //    //Double pesoneto;
-                            //    //Double pesopromedio;
-                            //}
+                            if (dialog == DialogResult.Yes)
+                            {
+                                //conect.Open();
+                                //conect.CreateCommand();
+                                cmd = new OleDbCommand("COMMIT", conect);
+                                //cmd.CommandText = "COMMIT";
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Insertado con éxito");
+                                comboBox1.Enabled = false;
+                                comboBox2.Enabled = false;
+                                //detalle_APT_Pedidos_SalidasDataGridView.Enabled = false;
+                                detalle_APT_Pedidos_SalidasDataGridView.ReadOnly = true;
 
+
+                                //foreach (DataGridViewRow fila in detalle_APT_Pedidos_SalidasDataGridView.Rows)
+                                //{
+                                //    String clave = fila.Cells[0].Value.ToString().Trim();
+                                //    //String producto = fila.Cells[1].Value.ToString().Trim();
+                                //    String lote = fila.Cells[2].Value.ToString().Trim();
+                                //    String caducidad = fila.Cells[3].Value.ToString().Trim();
+                                //    int piezas = Convert.ToInt32(fila.Cells[4].Value);
+                                //    int tipocaja = Convert.ToInt32(fila.Cells[5].Value);
+                                //    int cajas = Convert.ToInt32(fila.Cells[5].Value);
+                                //    Double pesobruto = Convert.ToDouble(fila.Cells[6].Value);
+                                //    //Double pesocajas;
+                                //    //Double pesoneto;
+                                //    //Double pesopromedio;
+                                //}
+
+                            }
+                            else if (dialog == DialogResult.No)
+                            {
+                                cmd = new OleDbCommand("ROLLBACK", conect);
+                                //cmd.CommandText = "ROLLBACK";
+                                cmd.ExecuteNonQuery();
+                            }
                         }
-                        else if (dialog == DialogResult.No)
+                        else
                         {
-                            cmd = new OleDbCommand("ROLLBACK", conect);
-                            //cmd.CommandText = "ROLLBACK";
-                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Ingrese datos válidos en la grid");
                         }
                     }
                         //}
@@ -787,6 +795,42 @@ namespace pruebaaccess
 
                 }
             //}
+        }
+
+
+        private bool celdasNullEnDataGridView()
+        {
+            bool bVacia = false;
+            if (detalle_APT_Pedidos_SalidasDataGridView.Rows.Count > 1)
+            {
+                foreach (DataGridViewRow row in detalle_APT_Pedidos_SalidasDataGridView.Rows)
+                {
+                    int cont = detalle_APT_Pedidos_SalidasDataGridView.Rows.Count;
+                    if (row.Index == cont - 1)
+                    {
+                        break;
+                    }
+                    if
+                        (string.IsNullOrEmpty(row.Cells[0].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[1].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[2].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[4].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[6].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[7].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[8].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[9].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[10].FormattedValue.ToString()))
+                    { bVacia = true; }
+                }
+            }
+            else
+            {
+                bVacia = true;
+            }
+
+            return bVacia;
         }
 
         public int EvaluarIdTipoCaja(String TipoCaja)

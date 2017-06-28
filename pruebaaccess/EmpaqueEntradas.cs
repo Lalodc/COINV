@@ -394,26 +394,34 @@ namespace pruebaaccess
                     }
                     else
                     {
-                        guardarEntradaEmpaque(conect);
-                        //PREGUNTA SI ESTA SEGURO QUE DESEA GUARDAR//
-                        DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
-                        //SI LA RESPUESTA ES SI, HACE UN COMMIT//
-                        if (dialog == DialogResult.Yes)
+                        Boolean EGrid = celdasNullEnDataGridView();
+                        if (EGrid == false)
                         {
-                            cmd = new OleDbCommand("COMMIT", conect);
-                            cmd.ExecuteNonQuery();
-                            MessageBox.Show("Insertado con éxito");
-                            comboBox1.Enabled = false;
-                            comboBox2.Enabled = false;
+                            guardarEntradaEmpaque(conect);
+                            //PREGUNTA SI ESTA SEGURO QUE DESEA GUARDAR//
+                            DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
+                            //SI LA RESPUESTA ES SI, HACE UN COMMIT//
+                            if (dialog == DialogResult.Yes)
+                            {
+                                cmd = new OleDbCommand("COMMIT", conect);
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Insertado con éxito");
+                                comboBox1.Enabled = false;
+                                comboBox2.Enabled = false;
 
-                            dataGridView1.ReadOnly = true;
+                                dataGridView1.ReadOnly = true;
 
 
-                        }//SI LA RESPUESTA ES NO, HACE UN ROLLBACK Y NO INSERTA NADA//
-                        else if (dialog == DialogResult.No)
+                            }//SI LA RESPUESTA ES NO, HACE UN ROLLBACK Y NO INSERTA NADA//
+                            else if (dialog == DialogResult.No)
+                            {
+                                cmd = new OleDbCommand("ROLLBACK", conect);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        else
                         {
-                            cmd = new OleDbCommand("ROLLBACK", conect);
-                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Ingrese datos válidos en la grid");
                         }
                     }
                 }
@@ -535,6 +543,41 @@ namespace pruebaaccess
                 MessageBox.Show("Existe un error con esta clave");
                 throw;
             }
+        }
+
+        private bool celdasNullEnDataGridView()
+        {
+            bool bVacia = false;
+            if (dataGridView1.Rows.Count > 1)
+            {
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    int cont = dataGridView1.Rows.Count;
+                    if (row.Index == cont - 1)
+                    {
+                        break;
+                    }
+                    if
+                        (string.IsNullOrEmpty(row.Cells[0].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[1].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[2].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[3].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[4].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[5].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[6].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[7].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[8].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[9].FormattedValue.ToString()) ||
+                         string.IsNullOrEmpty(row.Cells[10].FormattedValue.ToString()))
+                    { bVacia = true; }
+                }
+            }
+            else
+            {
+                bVacia = true;
+            }
+
+            return bVacia;
         }
 
         //MÉTODO QUE EVALUA EL TIPO DE CAJA Y RETORNA SU ID//
