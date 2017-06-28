@@ -527,7 +527,7 @@ namespace pruebaaccess
         }
 
 
-        //MÉTODO QUE EVALUA EL TIPO DE CAJA Y RETORNA SU ID//
+        //MÉTODO QUE EVALÚA EL TIPO DE CAJA Y RETORNA SU ID//
         public int EvaluarIdTipoCaja(String TipoCaja)
         {
             int idcaja = 0;
@@ -549,7 +549,7 @@ namespace pruebaaccess
             return idcaja;
         }
 
-        //MÉTODO QUE EVALUA EL PESO DE LA CAJA Y RETORNA SU PESO//
+        //MÉTODO QUE EVALÚA EL PESO DE LA CAJA Y RETORNA SU PESO//
         public Double EvaluarPesoTipoCaja(String TipoCaja)
         {
             Double pesocaja = 0;
