@@ -89,8 +89,6 @@ namespace pruebaaccess
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error: " + ex.Message);
-                    throw;
-
                 }
             }
         }
@@ -134,8 +132,7 @@ namespace pruebaaccess
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show("Error: " + ex.Message);
-                            throw;
+                            MessageBox.Show("Error: " + ex.Message);                            
                         }
                     }
                     else
