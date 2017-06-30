@@ -621,6 +621,7 @@ namespace pruebaaccess
                                 MessageBox.Show("Insertado con éxito");
                                 comboBox1.Enabled = false;
                                 comboBox2.Enabled = false;
+                                button2.Enabled = false;
                                 //detalle_APT_Pedidos_SalidasDataGridView.Enabled = false;
                                 detalle_APT_Pedidos_SalidasDataGridView.ReadOnly = true;
 

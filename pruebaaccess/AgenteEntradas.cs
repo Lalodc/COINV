@@ -16,5 +16,13 @@ namespace pruebaaccess
         {
             InitializeComponent();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Inicio frmInicio = new Inicio();
+            frmInicio.Show();
+            this.Hide();
+        }
+        
     }
 }

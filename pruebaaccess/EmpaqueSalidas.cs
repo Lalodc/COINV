@@ -404,7 +404,7 @@ namespace pruebaaccess
                                 MessageBox.Show("Insertado con éxito");
                                 comboBox1.Enabled = false;
                                 comboBox2.Enabled = false;
-
+                                button2.Enabled = false;
                                 dataGridView1.ReadOnly = true;
 
 
