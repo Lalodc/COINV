@@ -127,6 +127,7 @@ namespace pruebaaccess
                                 textBox2.Text = "";
                                 comboBox1.Text = "";
                                 comboBox2.Text = "";
+                                comboBox3.Text = "";
                             }
                             //Group1
                             comboBox1.Enabled = false;
@@ -304,6 +305,7 @@ namespace pruebaaccess
 
                     }
                     Double totalcajas = totalcajasprod + totalcajasvacias;
+                    textBox6.Text = totalcajasvacias.ToString();
                     textBox7.Text = totalcajas.ToString();
                     textBox4.Text = totalpiezas.ToString();
                     textBox5.Text = totalcajasprod.ToString();
@@ -348,6 +350,368 @@ namespace pruebaaccess
                 throw;
             }
         }
+
+
+        //BOTON NUEVO, LIMPIA EL FORM PARA LLENAR UNA NUEVA SALIDA//
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OleDbConnection conect = new OleDbConnection(AgenteEntradas.cadConex))
+                {
+                    conect.Open();
+                    cmd = conect.CreateCommand();
+                    //LIMPIA LOS CAMPOS//
+                    button2.Enabled = true;
+                    textBox2.Text = "";
+                    comboBox1.Text = "[Selecciona]";
+                    comboBox2.Text = "[Selecciona]";
+                    comboBox3.Text = "[Selecciona]";
+                    comboBox1.Enabled = true;
+                    comboBox2.Enabled = true;
+                    comboBox3.Enabled = true;
+                    textBox3.Text = "0";
+                    textBox4.Text = "0";
+                    textBox5.Text = "0.00";
+                    textBox6.Text = "0.00";
+                    textBox7.Text = "0.00";
+
+                    //OBTIENE LA FECHA ACTUAL//
+                    DateTime hoy = DateTime.Today;
+
+                    String fechahoy = hoy.ToShortDateString();
+                    textBox2.Text = fechahoy;
+                    textBox1.Text = ObtenerClaveNueva().ToString();
+
+                    reader.Close();
+
+                    //LIMPIA EL DATATABLE//
+                    dt.Clear();
+
+                    dataGridView1.ReadOnly = false;
+                    dataGridView2.ReadOnly = false;
+
+
+                    cmd.CommandText = "SELECT nombrecompleto From agentes;";
+                    reader = cmd.ExecuteReader();
+                    while (true)
+                    {
+                        comboBox1.Items.Add(Convert.ToString(reader.GetValue(0)));
+                    }
+
+                    cmd.CommandText = "SELECT nombreregión From regiones;";
+                    reader = cmd.ExecuteReader();
+                    while (true)
+                    {
+                        comboBox2.Items.Add(Convert.ToString(reader.GetValue(0)));
+                    }
+
+                    
+
+                    //BUSCA LOS USUARIO QUE ENTREGAN PARA PONER EN LOS COMBOBOX//
+                    cmd.CommandText = "SELECT sysvusuario.nombreusuario from sysvusuario";
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        comboBox3.Items.Add(Convert.ToString(reader.GetValue(0)));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+
+        //BUSCA LA ÚLTIMA SALIDA E INCREMENTA 1, QUE SERÁ LA NUEVA//
+        public int ObtenerClaveNueva()
+        {
+            try
+            {
+                cmd.CommandText = "SELECT TOP 1 IdEntradasAPT FROM [APT - Entradas] ORDER BY IdEntradasAPT desc;";
+                reader = cmd.ExecuteReader();
+                reader.Read();
+                int val = Convert.ToInt32(reader.GetValue(0));
+                val = val + 1;
+                return val;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error: " + e.Message);
+                throw;
+            }
+
+        }
+
+
+        //OBTIENE LOS TIPOS DE CAJA PARA AGREGARLOS AL COMBOBOX DEL GRID//
+        public List<String> obtenerTiposCajas()
+        {
+            try
+            {
+                using (OleDbConnection conect = new OleDbConnection(AgenteEntradas.cadConex))
+                {
+                    cmd = conect.CreateCommand();
+                    cmd.CommandText = "SELECT [Tipos de Cajas].descripcióntipocaja, [Tipos de Cajas].pesocaja from [Tipos de Cajas]";
+                    List<String> lista = new List<String>();
+
+                    conect.Open();
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        lista.Add(reader.GetValue(0) + " " + reader.GetValue(1));
+                    }
+
+                    return lista;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error: " + e.Message);
+                throw;
+            }
+        }
+
+
+        //BOTON GUARDAR, GUARDA UNA NUEVA SALIDA//
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (OleDbConnection conect = new OleDbConnection(AgenteEntradas.cadConex))
+                {
+
+                    if (comboBox1.Text == "" || comboBox1.Text == "[Selecciona]" || comboBox2.Text == "" || comboBox2.Text == "[Selecciona]" || comboBox3.Text == "" || comboBox3.Text == "[Selecciona]")
+                    {
+                        MessageBox.Show("Ingrese datos válidos en el encabezado");
+                    }
+                    else
+                    {
+                        Boolean EGrid = celdasNullEnDataGridView();
+                        if (EGrid == false)
+                        {
+                            guardarEntradaAgente(conect);
+                            //PREGUNTA SI ESTA SEGURO QUE DESEA GUARDAR//
+                            DialogResult dialog = MessageBox.Show("Desea guardar?", "Guardar", MessageBoxButtons.YesNo);
+                            //SI LA RESPUESTA ES SI, HACE UN COMMIT//
+                            if (dialog == DialogResult.Yes)
+                            {
+                                cmd = new OleDbCommand("COMMIT", conect);
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Insertado con éxito");
+                                comboBox1.Enabled = false;
+                                comboBox2.Enabled = false;
+                                comboBox3.Enabled = false;
+                                button2.Enabled = false;
+                                dataGridView1.ReadOnly = true;
+                                dataGridView2.ReadOnly = true;
+
+
+                            }//SI LA RESPUESTA ES NO, HACE UN ROLLBACK Y NO INSERTA NADA//
+                            else if (dialog == DialogResult.No)
+                            {
+                                cmd = new OleDbCommand("ROLLBACK", conect);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Ingrese datos válidos en la grid");
+                        }
+
+                    }
+
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
+
+
+        //MÉTODO GUARDAR, INICIA LA TRANSACCIÓN PARA GUARDAR LOS DATOS DE LA SALIDA//
+        public void guardarEntradaAgente(OleDbConnection conect)
+        {
+            try
+            {
+                conect.Open();
+                //INICIA LA TRANSACCIÓN PARA GUARDAR LA SALIDA//
+                cmd = new OleDbCommand("BEGIN TRANSACTION", conect);
+                cmd.ExecuteNonQuery();
+
+                DateTime hoy = DateTime.Today;
+
+                int idExistencia;
+                String fechahoy = hoy.ToShortDateString();
+                if (hoy.Month >= 1 && hoy.Month <= 9)
+                {
+                    idExistencia = Convert.ToInt32(hoy.Year + "0" + hoy.Month);
+                }
+                else
+                {
+                    idExistencia = Convert.ToInt32(hoy.Year + "" + hoy.Month);
+                }
+
+                int idencabezado = Convert.ToInt32(textBox1.Text.Trim());
+                String FechaSAPTPedidos = textBox2.Text.Trim();
+                String nombreagente = comboBox1.Text.Trim();
+                String idAgente = obtenerIdAgente(nombreagente);
+                String nombreregion = comboBox2.Text.Trim();
+                int idregion = Convert.ToInt32(obtenerIdregion(nombreregion));
+                String nombreusuario = comboBox3.Text.Trim();
+
+                //try 
+                //{
+                //  if (UsuarioEntregoSAPTPedidos != "" && UsuarioEntregoSAPTPedidos != "[Selecciona]" && UsuarioRecibioSAPTPedidos != "" && UsuarioRecibioSAPTPedidos != "[Selecciona]")
+                //{
+                cmd.CommandText = "insert into [APT - Entradas](IdEntradasAPT, FechaEntrada, IdAgente, IdRegión, IdElaboróEntrada) values (@claveencabezado, @fechaencabezado, @idagente, @idregion, @usuarioelabora)";
+                //cmd.CommandText = "SELECT Nombre, ApellidoPaterno FROM Agentes WHERE (((IdAgente)=[@name]));";
+                cmd.Parameters.AddWithValue("@claveencabezado", idencabezado);
+                cmd.Parameters.AddWithValue("@fechaencabezado", FechaSAPTPedidos);
+                cmd.Parameters.AddWithValue("@usuariorecibio", idAgente);
+                cmd.Parameters.AddWithValue("@usuarioentrego", idregion);
+                cmd.Parameters.AddWithValue("@usuarioentrego", nombreusuario);
+                cmd.ExecuteNonQuery();
+                cmd.Parameters.Clear();
+
+                //}
+                //}
+                //catch (Exception)
+                //{
+                //    MessageBox.Show("Ingrese datos válidos en el encabezado");
+                //    throw;
+                //}
+
+
+
+
+                ////EDITANDO AQUI/////
+                //Regex Val = new Regex(@"a-zA-ZñÑ\s{2,50}");
+                //if (Val.IsMatch(UsuarioEntregoSAPTPedidos) && Val.IsMatch(UsuarioRecibioSAPTPedidos))
+                //{
+
+                //REALIZA LA CONSULTA PARA INSERTAR EL ENCABEZADO DE LA SALIDA//
+                //cmd.CommandText = "insert into [APT-Empaque Salidas](IdSAPT, FechaSAPT, UsuarioRecibióSAPT, usuarioentregóSAPT) values (@claveencabezado, @fechaencabezado, @usuariorecibio, @usuarioentrego)";
+                ////cmd.CommandText = "SELECT Nombre, ApellidoPaterno FROM Agentes WHERE (((IdAgente)=[@name]));";
+                //cmd.Parameters.AddWithValue("@claveencabezado", idencabezado);
+                //cmd.Parameters.AddWithValue("@fechaencabezado", FechaSAPTPedidos);
+                //cmd.Parameters.AddWithValue("@usuariorecibio", UsuarioRecibioSAPTPedidos);
+                //cmd.Parameters.AddWithValue("@usuarioentrego", UsuarioEntregoSAPTPedidos);
+                //cmd.ExecuteNonQuery();
+                //cmd.Parameters.Clear();
+                //}
+                //else
+                //{
+                //  MessageBox.Show("Ingrese datos validos en el encabezado");
+                //}
+
+                //ME QUEDE AQUI///////UHHHHH////
+                //RECORRE EL GRID E IGUALA LOS DATOS EN VARIABLES//
+                foreach (DataGridViewRow fila in dataGridView1.Rows)
+                {
+                    int cont = dataGridView1.Rows.Count;
+                    if (fila.Index == cont - 1)
+                    {
+                        break;
+                    }
+                    int IdTipoCajaSAPTPedidos = 0;
+                    int fila2 = fila.Index;
+                    int col = dataGridView1.CurrentCell.ColumnIndex;
+
+                    String IdSubProductoSAPTPedidos = fila.Cells[0].Value.ToString().Trim();
+                    String IdLoteCaducidadPedidos = fila.Cells[2].Value.ToString().Trim();
+                    String FechaCad = fila.Cells[3].Value.ToString().Trim();
+                    String FechaCaducidadSAPTPedidos = FechaCad.Split(' ')[0];
+                    int PiezasSAPTPedidos = Convert.ToInt32(fila.Cells[4].Value.ToString().Trim());
+                    String TipoCaja = Convert.ToString(dataGridView1.Rows[fila2].Cells[5].Value).Trim();
+                    //VA AL MÉTODO PARA OBTENER EL ID DEL TIPO DE CAJA//
+                    IdTipoCajaSAPTPedidos = EvaluarIdTipoCaja(TipoCaja);
+
+                    //MessageBox.Show("HOLA " + IdTipoCajaSAPTPedidos);
+                    int NumeroDeCajasSAPTPedidos = Convert.ToInt32(fila.Cells[6].Value.ToString().Trim());
+                    Double pesobruto = Convert.ToDouble(fila.Cells[7].Value.ToString().Trim());
+                    Double pesocajas = Convert.ToDouble(fila.Cells[8].Value.ToString().Trim());
+
+
+
+                    //REALIZA LA CONSULTA PARA INSERTAR LOS DETALLES DE LA ENTRADA//
+                    cmd.CommandText = "insert into [Detalle APT-Empaque Salidas](IdSAPT, idsubproductoSAPT, pesobrutoSAPT, idtipocajaSAPT, "
+                    + "númerodecajasSAPT, piezasSAPT, taraSAPT, idlotecaducidad, fechacaducidadSAPT) values(@detalleclave, @detalleclavepro, @detallepesobruto, "
+                    + "@detalleidcaja, @detallenumcaja, @detallepiezas, @detalletara, @detalleidlote, @detallefechacad)";
+                    cmd.Parameters.AddWithValue("@detalleclave", idencabezado);
+                    cmd.Parameters.AddWithValue("@detalleclavepro", IdSubProductoSAPTPedidos);
+                    cmd.Parameters.AddWithValue("@detallepesobruto", pesobruto);
+                    cmd.Parameters.AddWithValue("@detalleidcaja", IdTipoCajaSAPTPedidos);
+                    cmd.Parameters.AddWithValue("@detallenumcaja", NumeroDeCajasSAPTPedidos);
+                    cmd.Parameters.AddWithValue("@detallepiezas", PiezasSAPTPedidos);
+                    cmd.Parameters.AddWithValue("@detalletara", pesocajas);
+                    cmd.Parameters.AddWithValue("@detalleidlote", IdLoteCaducidadPedidos);
+                    cmd.Parameters.AddWithValue("@detallefechacad", FechaCaducidadSAPTPedidos);
+                    cmd.ExecuteNonQuery();
+                    cmd.Parameters.Clear();
+
+                    //SI EXISTE, ACTUALIZA LA COLUMNA DE EMPAQUEENTRADASKG PARA TENER LAS EXISTENCIAS AL DÍA//
+                    cmd.CommandText = "update [detalle existencias apt] set salidasempaquekg = salidasempaquekg + @pesobruto where " +
+                        "idexistenciaapt = @idExist AND idsubproducto = @idsubprod";
+                    cmd.Parameters.AddWithValue("@pesobruto", pesobruto);
+                    cmd.Parameters.AddWithValue("@idExist", idExistencia);
+                    cmd.Parameters.AddWithValue("@idsubprod", IdSubProductoSAPTPedidos);
+                    cmd.ExecuteNonQuery();
+                    cmd.Parameters.Clear();
+
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Existe un error con esta clave");
+                throw;
+            }
+        }
+
+        public String obtenerIdAgente(String nombreAgente)
+        {
+            try
+            {
+                cmd.CommandText = "SELECT idAgente from agentes where nombrecompleto = @nombreagente";
+                cmd.Parameters.AddWithValue("@nombreagente",nombreAgente);
+                reader = cmd.ExecuteReader();
+                reader.Read();
+                String val = Convert.ToString(reader.GetValue(0));
+                return val;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error: " + e.Message);
+                throw;
+            }
+        }
+
+        public String obtenerIdregion(String nombreregion)
+        {
+            try
+            {
+                cmd.CommandText = "SELECT idregión from regiones where nombreregión = @nombreregion";
+                cmd.Parameters.AddWithValue("@nombreagente", nombreregion);
+                reader = cmd.ExecuteReader();
+                reader.Read();
+                String val = Convert.ToString(reader.GetValue(0));
+                return val;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error: " + e.Message);
+                throw;
+            }
+        }
+
+
+
+
 
 
         private void button3_Click(object sender, EventArgs e)
