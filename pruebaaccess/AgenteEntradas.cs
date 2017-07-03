@@ -67,6 +67,7 @@ namespace pruebaaccess
                     reader = cmd.ExecuteReader();
                     reader.Read();
                     String idAgenteEntrada = Convert.ToString(reader.GetValue(0));
+                    reader.Close();
                     textBox1.Text = idAgenteEntrada;
 
                     bandera = 0;
@@ -214,22 +215,23 @@ namespace pruebaaccess
                     //BUSCAR EL DETALLE DE LA SALIDAS PARA MOSTRARLO EN EL GRID//
 
                     String query = "SELECT subproductos.idsubproducto, subproductos.nombresubproducto, unidades.descripcion, "
+                    + "subproductos.cantidadenvase, [detalle apt - entradas].piezasentradas, "
+                    + "[Tipos de cajas].descripcióntipocaja, [detalle apt - entradas].númerodecajasentradas, [detalle apt - entradas].kilosentradas,  "
+                    + "[Tipos de cajas].pesocaja*[detalle apt - entradas].númerodecajasentradas AS PesoCajas, [detalle apt - entradas].kilosentradas-PesoCajas AS PesoNeto, "
+                    + "IIf([detalle apt - entradas].piezasentradas=0, PesoNeto, PesoNeto/[detalle apt - entradas].piezasentradas) as PesoPromedio, [detalle apt - entradas].observacionesentradas from "
+                    + "subproductos, unidades, [detalle apt - entradas], [Tipos de cajas] WHERE [detalle apt - entradas].IdEntradasAPT = " + DidAgenteEntrada + " "
+                    + "AND subproductos.idsubproducto = [detalle apt - entradas].idsubproducto AND [Tipos de cajas].idtipocaja = [detalle apt - entradas].IdTipoCaja "
+                    + "AND Unidades.IdUnidad = subproductos.idUnidad";
+
+                    /*String query = "SELECT subproductos.idsubproducto, subproductos.nombresubproducto, unidades.descripcion, "
                     +"subproductos.cantidadenvase, [detalle apt - entradas].idlotecaducidad, [detalle apt - entradas].fechacaducidad, [detalle apt - entradas].piezasentradas, "
                     +"[Tipos de cajas].descripcióntipocaja, [detalle apt - entradas].númerodecajasentradas, [detalle apt - entradas].kilosentradas,  "
                     +"[Tipos de cajas].pesocaja*[detalle apt - entradas].númerodecajasentradas AS PesoCajas, [detalle apt - entradas].kilosentradas-PesoCajas AS PesoNeto, "
                     + "IIf([detalle apt - entradas].piezasentradas=0, PesoNeto, PesoNeto/[detalle apt - entradas].piezasentradas) as PesoPromedio, [detalle apt - entradas].observacionesentradas from "
                     +"subproductos, unidades, [detalle apt - entradas], [Tipos de cajas] WHERE [detalle apt - entradas].IdEntradasAPT = " + DidAgenteEntrada + " "
                     +"AND subproductos.idsubproducto = [detalle apt - entradas].idsubproducto AND [Tipos de cajas].idtipocaja = [detalle apt - entradas].IdTipoCaja "
-                    +"AND Unidades.IdUnidad = subproductos.idUnidad";
+                    +"AND Unidades.IdUnidad = subproductos.idUnidad";*/
 
-                    /*String query = "SELECT subproductos.idsubproducto, subproductos.nombresubproducto, [Detalle APT-Empaque Salidas].idlotecaducidad, "
-                        + "[Detalle APT-Empaque Salidas].fechacaducidadSAPT, [Detalle APT-Empaque Salidas].piezasSAPT, [Tipos de cajas].descripcióntipocaja, "
-                        + "[Detalle APT-Empaque Salidas].númerodecajasSAPT, [Detalle APT-Empaque Salidas].pesobrutoSAPT, "
-                        + "[Tipos de cajas].pesocaja*[Detalle APT-Empaque Salidas].númerodecajasSAPT AS PesoCajas, "
-                        + "[Detalle APT-Empaque Salidas].pesobrutoSAPT-PesoCajas AS PesoNeto, "
-                        + "IIf([Detalle APT-Empaque Salidas].piezasSAPT=0, PesoNeto, PesoNeto/[Detalle APT-Empaque Salidas].piezasSAPT) as PesoPromedio "
-                        + "from subproductos, [Detalle APT-Empaque Salidas], [Tipos de cajas] where [Detalle APT-Empaque Salidas].idSAPT = " + DidAgenteEntrada + " "
-                        + "AND subproductos.idsubproducto = [Detalle APT-Empaque Salidas].idsubproductoSAPT AND [Tipos de cajas].idtipocaja = [Detalle APT-Empaque Salidas].idtipocajaSAPT";*/
 
                     adapter = new OleDbDataAdapter(query, conect);
                     dt1 = new DataTable();
@@ -244,16 +246,34 @@ namespace pruebaaccess
                     dataGridView1.Columns[1].HeaderText = "Producto";
                     dataGridView1.Columns[2].HeaderText = "Unidad";
                     dataGridView1.Columns[3].HeaderText = "Cap Empaque";
-                    dataGridView1.Columns[4].HeaderText = "Lote";
-                    dataGridView1.Columns[5].HeaderText = "Caducidad";
-                    dataGridView1.Columns[6].HeaderText = "Piezas";
-                    dataGridView1.Columns[7].HeaderText = "Tipo Caja";
-                    dataGridView1.Columns[8].HeaderText = "Cajas";
-                    dataGridView1.Columns[9].HeaderText = "Peso Bruto";
-                    dataGridView1.Columns[10].HeaderText = "Peso Cajas";
-                    dataGridView1.Columns[11].HeaderText = "Peso Neto";
-                    dataGridView1.Columns[12].HeaderText = "Peso Promedio";
-                    dataGridView1.Columns[13].HeaderText = "Observaciones";
+                    //dataGridView1.Columns[4].HeaderText = "Lote";
+                    //dataGridView1.Columns[5].HeaderText = "Caducidad";
+                    dataGridView1.Columns[4].HeaderText = "Piezas";
+                    dataGridView1.Columns[5].HeaderText = "Tipo Caja";
+                    dataGridView1.Columns[6].HeaderText = "Cajas";
+                    dataGridView1.Columns[7].HeaderText = "Peso Bruto";
+                    dataGridView1.Columns[8].HeaderText = "Peso Cajas";
+                    dataGridView1.Columns[9].HeaderText = "Peso Neto";
+                    dataGridView1.Columns[10].HeaderText = "Peso Promedio";
+                    dataGridView1.Columns[11].HeaderText = "Observaciones";
+
+
+
+
+                    //dataGridView1.Columns[0].HeaderText = "Clave";
+                    //dataGridView1.Columns[1].HeaderText = "Producto";
+                    //dataGridView1.Columns[2].HeaderText = "Unidad";
+                    //dataGridView1.Columns[3].HeaderText = "Cap Empaque";
+                    //dataGridView1.Columns[4].HeaderText = "Lote";
+                    //dataGridView1.Columns[5].HeaderText = "Caducidad";
+                    //dataGridView1.Columns[6].HeaderText = "Piezas";
+                    //dataGridView1.Columns[7].HeaderText = "Tipo Caja";
+                    //dataGridView1.Columns[8].HeaderText = "Cajas";
+                    //dataGridView1.Columns[9].HeaderText = "Peso Bruto";
+                    //dataGridView1.Columns[10].HeaderText = "Peso Cajas";
+                    //dataGridView1.Columns[11].HeaderText = "Peso Neto";
+                    //dataGridView1.Columns[12].HeaderText = "Peso Promedio";
+                    //dataGridView1.Columns[13].HeaderText = "Observaciones";
 
                     //LLENA EL BINDINGNAVIGATOR//
                     bs = new BindingSource();
@@ -280,19 +300,19 @@ namespace pruebaaccess
                         }
                         //VA GENERANDO LOS CAMPOS CALCULABLES//
                         dataGridView1.CurrentCell = dataGridView1.Rows[fila.Index].Cells[0];
-                        Double piezasacum = Convert.ToDouble(dataGridView1.Rows[fila.Index].Cells[6].Value);
+                        Double piezasacum = Convert.ToDouble(dataGridView1.Rows[fila.Index].Cells[4].Value);
                         totalpiezas = totalpiezas + piezasacum;
 
-                        Double cajasacum = Convert.ToDouble(dataGridView1.Rows[fila.Index].Cells[8].Value);
+                        Double cajasacum = Convert.ToDouble(dataGridView1.Rows[fila.Index].Cells[6].Value);
                         totalcajasprod = totalcajasprod + cajasacum;
 
-                        Double pesobrutoacum = Convert.ToDouble(dataGridView1.Rows[fila.Index].Cells[9].Value);
+                        Double pesobrutoacum = Convert.ToDouble(dataGridView1.Rows[fila.Index].Cells[7].Value);
                         totalpesobruto = totalpesobruto + pesobrutoacum;
 
-                        Double pesocajasacum = Convert.ToDouble(dataGridView1.Rows[fila.Index].Cells[10].Value);
+                        Double pesocajasacum = Convert.ToDouble(dataGridView1.Rows[fila.Index].Cells[8].Value);
                         totalpesocajas = totalpesocajas + pesocajasacum;
 
-                        Double pesonetoacum = Convert.ToDouble(dataGridView1.Rows[fila.Index].Cells[11].Value);
+                        Double pesonetoacum = Convert.ToDouble(dataGridView1.Rows[fila.Index].Cells[9].Value);
                         totalpesoneto = totalpesoneto + pesonetoacum;
                     }
 
@@ -383,6 +403,13 @@ namespace pruebaaccess
                     textBox8.Text = "0.00";
                     textBox9.Text = "0.00";
                     textBox10.Text = "0.00";
+                    totalpiezas = 0;
+                    totalpesobruto = 0;
+                    totalpesoneto = 0;
+                    totalcajasprod = 0;
+                    totalpesocajas = 0;
+                    totalcajasvacias = 0;
+                    totalcajas = 0;
 
                     //OBTIENE LA FECHA ACTUAL//
                     DateTime hoy = DateTime.Today;
@@ -474,7 +501,7 @@ namespace pruebaaccess
                     {
                         lista.Add(reader.GetValue(0) + " " + reader.GetValue(1));
                     }
-
+                    reader.Close();
                     return lista;
                 }
             }
@@ -576,6 +603,7 @@ namespace pruebaaccess
                 String nombreregion = comboBox2.Text.Trim();
                 int idregion = Convert.ToInt32(obtenerIdregion(nombreregion));
                 String nombreusuario = comboBox3.Text.Trim();
+                String idUsuario = Convert.ToString(obtenerIdUsuario(nombreusuario));
                 String observacionesE = textBox3.Text.Trim();
 
                 //try 
@@ -589,7 +617,7 @@ namespace pruebaaccess
                 cmd.Parameters.AddWithValue("@fechaencabezado", FechaSAPTPedidos);
                 cmd.Parameters.AddWithValue("@usuariorecibio", idAgente);
                 cmd.Parameters.AddWithValue("@usuarioentrego", idregion);
-                cmd.Parameters.AddWithValue("@usuarioentrego", nombreusuario);
+                cmd.Parameters.AddWithValue("@usuarioentrego", idUsuario);
                 cmd.Parameters.AddWithValue("@observacionesE", observacionesE);
                 cmd.ExecuteNonQuery();
                 cmd.Parameters.Clear();
@@ -642,21 +670,21 @@ namespace pruebaaccess
                     //String IdLoteCaducidadPedidos = fila.Cells[2].Value.ToString().Trim();
                     //String FechaCad = fila.Cells[3].Value.ToString().Trim();
                     //String FechaCaducidadSAPTPedidos = FechaCad.Split(' ')[0];
-                    int PiezasSAPTPedidos = Convert.ToInt32(fila.Cells[6].Value.ToString().Trim());
-                    String TipoCaja = Convert.ToString(dataGridView1.Rows[fila2].Cells[7].Value).Trim();
+                    int PiezasSAPTPedidos = Convert.ToInt32(fila.Cells[4].Value.ToString().Trim());
+                    String TipoCaja = Convert.ToString(dataGridView1.Rows[fila2].Cells[5].Value).Trim();
                     //VA AL MÉTODO PARA OBTENER EL ID DEL TIPO DE CAJA//
                     IdTipoCajaSAPTPedidos = EvaluarIdTipoCaja(TipoCaja);
 
                     //MessageBox.Show("HOLA " + IdTipoCajaSAPTPedidos);
-                    int NumeroDeCajasSAPTPedidos = Convert.ToInt32(fila.Cells[8].Value.ToString().Trim());
-                    Double pesobruto = Convert.ToDouble(fila.Cells[9].Value.ToString().Trim());
-                    Double pesocajas = Convert.ToDouble(fila.Cells[10].Value.ToString().Trim());
-                    String observ = Convert.ToString(fila.Cells[13].Value.ToString().Trim());
+                    int NumeroDeCajasSAPTPedidos = Convert.ToInt32(fila.Cells[6].Value.ToString().Trim());
+                    Double pesobruto = Convert.ToDouble(fila.Cells[7].Value.ToString().Trim());
+                    Double pesocajas = Convert.ToDouble(fila.Cells[8].Value.ToString().Trim());
+                    String observ = Convert.ToString(fila.Cells[11].Value.ToString().Trim());
 
 
 
                     //REALIZA LA CONSULTA PARA INSERTAR LOS DETALLES DE LA ENTRADA//
-                    cmd.CommandText = "insert into [Detalle APT-Entradas](IdEntradasAPT, IdSubProducto, KilosEntradas, IdTipoCaja, "
+                    cmd.CommandText = "insert into [Detalle APT - Entradas](IdEntradasAPT, IdSubProducto, KilosEntradas, IdTipoCaja, "
                     + "NúmeroDeCajasEntradas, PiezasEntradas, Tara, ObservacionesEntradas) values(@detalleclave, @detalleclavepro, @detallepesobruto, "
                     + "@detalleidcaja, @detallenumcaja, @detallepiezas, @detalletara, @detalleobser)";
                     cmd.Parameters.AddWithValue("@detalleclave", idencabezado);
@@ -725,13 +753,39 @@ namespace pruebaaccess
 
         public String obtenerIdAgente(String nombreAgente)
         {
+             try
+            {                
+                    cmd.CommandText = "SELECT idAgente from agentes where nombrecompleto = @nombreagente";
+                    cmd.Parameters.AddWithValue("@nombreagente",nombreAgente);
+                    reader = cmd.ExecuteReader();
+                    reader.Read();
+                    String val = Convert.ToString(reader.GetValue(0));
+                    reader.Close();
+                    cmd.Parameters.Clear();
+                    return val;
+            
+                
+             }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error: " + e.Message);
+                throw;
+            }
+        
+        
+        }
+
+        public String obtenerIdregion(String nombreregion)
+        {
             try
             {
-                cmd.CommandText = "SELECT idAgente from agentes where nombrecompleto = @nombreagente";
-                cmd.Parameters.AddWithValue("@nombreagente",nombreAgente);
+                cmd.CommandText = "SELECT idregión from regiones where nombreregión = @nombreregion";
+                cmd.Parameters.AddWithValue("@nombrregion", nombreregion);
                 reader = cmd.ExecuteReader();
                 reader.Read();
                 String val = Convert.ToString(reader.GetValue(0));
+                reader.Close();
+                cmd.Parameters.Clear();
                 return val;
             }
             catch (Exception e)
@@ -741,22 +795,28 @@ namespace pruebaaccess
             }
         }
 
-        public String obtenerIdregion(String nombreregion)
+        public String obtenerIdUsuario(String nombreUsuario)
         {
             try
             {
-                cmd.CommandText = "SELECT idregión from regiones where nombreregión = @nombreregion";
-                cmd.Parameters.AddWithValue("@nombreagente", nombreregion);
+                cmd.CommandText = "SELECT usuario from sysvusuario where nombreusuario = @user";
+                cmd.Parameters.AddWithValue("@user", nombreUsuario);
                 reader = cmd.ExecuteReader();
                 reader.Read();
                 String val = Convert.ToString(reader.GetValue(0));
+                reader.Close();
+                cmd.Parameters.Clear();
                 return val;
+
+
             }
             catch (Exception e)
             {
                 MessageBox.Show("Error: " + e.Message);
                 throw;
             }
+
+
         }
 
 
@@ -854,7 +914,7 @@ namespace pruebaaccess
                     //SendKeys.Send("{UP}");                    
 
                     //VERIFICA QUE SE ENCUENTRE EN LA ULTIMA COLUMNA//
-                    if (dataGridView1.CurrentCell.ColumnIndex == 13)
+                    if (dataGridView1.CurrentCell.ColumnIndex == 11)
                     {
                         ///EDITANDO                      
                         totalpiezas = 0;
@@ -875,19 +935,19 @@ namespace pruebaaccess
                             //VA REALIZANDO LAS OPERACIONES PARA MOSTRAR LOS TOTALES EN EL ENCABEZADO//
                             dataGridView1.CurrentCell = dataGridView1.Rows[item.Index].Cells[0];                            
 
-                            Double piezasacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[6].Value);
+                            Double piezasacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[4].Value);
                             totalpiezas = totalpiezas + piezasacum;
 
-                            Double cajasacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[8].Value);
+                            Double cajasacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[6].Value);
                             totalcajasprod = totalcajasprod + cajasacum;
 
-                            Double pesobrutoacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[9].Value);
+                            Double pesobrutoacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[7].Value);
                             totalpesobruto = totalpesobruto + pesobrutoacum;
 
-                            Double pesocajasacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[10].Value);
+                            Double pesocajasacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[8].Value);
                             totalpesocajas = totalpesocajas + pesocajasacum;
 
-                            Double pesonetoacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[11].Value);
+                            Double pesonetoacum = Convert.ToDouble(dataGridView1.Rows[item.Index].Cells[9].Value);
                             totalpesoneto = totalpesoneto + pesonetoacum;
 
                         }
@@ -907,6 +967,8 @@ namespace pruebaaccess
                         //////Double totalcajas = totalcajasprod + totalcajasvacias;
                         ////textBox6.Text = totalcajasvacias.ToString();
                         //textBox7.Text = totalcajas.ToString();
+                        totalcajas = totalcajasprod + totalcajasvacias;
+                        textBox7.Text = totalcajas.ToString();
                         textBox4.Text = totalpiezas.ToString();
                         textBox5.Text = totalcajasprod.ToString();
                         textBox8.Text = totalpesobruto.ToString();
@@ -942,7 +1004,7 @@ namespace pruebaaccess
 
                     totalcajasvacias = 0;
                     //VERIFICA QUE SE ENCUENTRE EN LA ULTIMA COLUMNA//
-                    if (dataGridView1.CurrentCell.ColumnIndex == 2)
+                    if (dataGridView2.CurrentCell.ColumnIndex == 2)
                     {
                         foreach (DataGridViewRow f in dataGridView2.Rows)
                         {
@@ -999,6 +1061,12 @@ namespace pruebaaccess
                             //ASIGNA VALOR A LA CELDA DE LA COLUMNA DE "NOMBRE DEL PRODUCTO" CON UNA//
                             //CONSULTA AUTOMÁTICA AL INGRESAR EL ID DEL PRODUCTO//
                             dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[col + 1].Value = buscarDetalle(iddetalle);
+                            String[] a = new String[1];
+                            a = ObtenerUnidadCapacidad(iddetalle);
+                            dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[col + 2].Value = a[0];
+                            dataGridView1.Rows[dataGridView1.CurrentCell.RowIndex].Cells[col + 3].Value = a[1];
+                            SendKeys.Send("{RIGHT}");
+                            SendKeys.Send("{RIGHT}");
                             SendKeys.Send("{RIGHT}");
                         }
                         else
@@ -1118,13 +1186,38 @@ namespace pruebaaccess
             {
                 MessageBox.Show("Error: " + ex.Message);
                 SendKeys.Send("{UP}");
-                throw;
+                
             }
         }
 
-        public void ObtenerUnidadCapacidad()
+        public String[] ObtenerUnidadCapacidad(String id)
         {
-            cmd.CommandText = "SELECT unidades.descripcion, subproductos.cantidadenvase FROM Subproductos, Unidades WHERE SubProductos.IdSubProducto = "PT-05-01" AND SubProductos.IdUnidad = Unidades.IdUnidad;";
+            try
+            {
+                using (OleDbConnection conect = new OleDbConnection(AgenteEntradas.cadConex))
+                {
+                    conect.Open();
+                    cmd = conect.CreateCommand();
+                    cmd.CommandText = "SELECT unidades.descripcion, subproductos.cantidadenvase FROM Subproductos, Unidades WHERE SubProductos.IdSubProducto = @id AND SubProductos.IdUnidad = Unidades.IdUnidad;";
+                    cmd.Parameters.AddWithValue("@id", id);
+                    String[] valores = new String[2];
+                    
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        valores[0] = Convert.ToString(reader.GetValue(0));
+                        valores[1] = Convert.ToString(reader.GetValue(1));
+                        //lista.Add(reader.GetValue(0) + " " + reader.GetValue(1));
+                    }
+                    return valores;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+                throw;
+            }
+
         }
 
 
@@ -1134,7 +1227,7 @@ namespace pruebaaccess
         {//>>>>>>>>>>>>>>
             try
             {
-                dataGridView2.Columns[1].ReadOnly = true;
+                //dataGridView2.Columns[1].ReadOnly = true;
 
                 using (OleDbConnection conect = new OleDbConnection(AgenteEntradas.cadConex))
                 {
@@ -1347,37 +1440,37 @@ namespace pruebaaccess
 
 
         //MÉTODO AL HACER CLIC EN UNA CELDA DEL GRID//
-        private void dataGridView2_CellBeginEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            //String valor = Convert.ToString(dataGridView1.CurrentCell.RowIndex);
-            //String valor2 = Convert.ToString(dataGridView1.CurrentCell.ColumnIndex);
-            //MessageBox.Show(valor + ", "+ valor2);
-            try
-            {
-                dataGridView1.Columns[1].ReadOnly = true;
-                using (OleDbConnection conect = new OleDbConnection(AgenteEntradas.cadConex))
-                {
-                    if (e.ColumnIndex > -1)
-                    {
-                        dpbox2 = new DataGridViewComboBoxCell();
-                        //SE LLAMA AL MÉTODO OBTENERTIPOSCAJAS PARA LLENAR EL COMBOBOX DEL GRID//
-                        if (dataGridView2.Columns[e.ColumnIndex].Name.Contains("descripcióntipocaja"))
-                        {
-                            dataGridView2[e.ColumnIndex, e.RowIndex] = dpbox2;
-                            dpbox2.DataSource = obtenerTiposCajas();
+        //private void dataGridView2_CellBeginEdit(object sender, DataGridViewCellEventArgs e)
+        //{
+        //    String valor = Convert.ToString(dataGridView1.CurrentCell.RowIndex);
+        //    String valor2 = Convert.ToString(dataGridView1.CurrentCell.ColumnIndex);
+        //    MessageBox.Show(valor + ", "+ valor2);
+        //    try
+        //    {
+        //        dataGridView1.Columns[1].ReadOnly = true;
+        //        using (OleDbConnection conect = new OleDbConnection(AgenteEntradas.cadConex))
+        //        {
+        //            if (e.ColumnIndex > -1)
+        //            {
+        //                dpbox2 = new DataGridViewComboBoxCell();
+        //                //SE LLAMA AL MÉTODO OBTENERTIPOSCAJAS PARA LLENAR EL COMBOBOX DEL GRID//
+        //                if (dataGridView2.Columns[e.ColumnIndex].Name.Contains("descripcióntipocaja"))
+        //                {
+        //                    dataGridView2[e.ColumnIndex, e.RowIndex] = dpbox2;
+        //                    dpbox2.DataSource = obtenerTiposCajas();
 
-                        }
+        //                }
 
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-                throw;
-            }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error: " + ex.Message);
+        //        throw;
+        //    }
 
-        }
+        //}
 
         //MÉTODO AL INICIAR A EDITAR UNA CELDA//
         private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
@@ -1404,7 +1497,7 @@ namespace pruebaaccess
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
-                throw;
+                
             }
         }
 
@@ -1415,6 +1508,40 @@ namespace pruebaaccess
             frmInicio.Show();
             this.Hide();
         }
+
+        private void dataGridView2_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            
+            try
+            {
+                //String valor = Convert.ToString(dataGridView2.CurrentCell.RowIndex);
+                //String valor2 = Convert.ToString(dataGridView2.CurrentCell.ColumnIndex);
+                //MessageBox.Show(valor + ", " + valor2);
+                //dataGridView1.Columns[1].ReadOnly = true;
+                using (OleDbConnection conect = new OleDbConnection(AgenteEntradas.cadConex))
+                {
+                    if (e.ColumnIndex > -1)
+                    {
+                        dpbox2 = new DataGridViewComboBoxCell();
+                        //SE LLAMA AL MÉTODO OBTENERTIPOSCAJAS PARA LLENAR EL COMBOBOX DEL GRID//
+                        if (dataGridView2.Columns[e.ColumnIndex].Name.Contains("descripcióntipocaja"))
+                        {
+                            dataGridView2[e.ColumnIndex, e.RowIndex] = dpbox2;
+                            dpbox2.DataSource = obtenerTiposCajas();
+
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+                
+            }
+        }
+
+        
         
         
     }
