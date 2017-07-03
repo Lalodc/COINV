@@ -179,7 +179,7 @@ namespace pruebaaccess
                     cmd.CommandText = "SELECT fechaentrada, nombrecompleto, nombreregión, usuario, observacionesentrada FROM ((([apt - entradas] "
                     +"INNER JOIN agentes ON [apt - entradas].idagente = agentes.idagente) INNER JOIN regiones ON [apt - entradas].idregión = regiones.idregión) "
                     +"INNER JOIN sysvusuario ON [apt - entradas].idelaboróentrada = sysvusuario.usuario)  WHERE [apt - entradas].idEntradasAPT = @idAgenteEntrada";
-                    cmd.Parameters.AddWithValue("idAgenteEntrada", EidAgenteEntrada);
+                    cmd.Parameters.AddWithValue("@idAgenteEntrada", EidAgenteEntrada);
                     /*cmd.CommandText = "SELECT [APT-Empaque Salidas].fechaSAPT, [APT-Empaque Salidas].usuarioentregósapt, [APT-Empaque Salidas].usuariorecibiósapt "
                     + "from [APT-Empaque Salidas] where [APT-Empaque Salidas].idsapt =" + EidAgenteEntrada + ";";*/
                     conect.Open();
@@ -242,19 +242,31 @@ namespace pruebaaccess
                     dataGridView1.DataSource = dt1;
 
                     //ASIGNA NOMBRE A LOS ENCABEZADOS DE CADA COLUMNA//
+                    this.dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[0].HeaderText = "Clave";
+                    this.dataGridView1.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[1].HeaderText = "Producto";
+                    this.dataGridView1.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[2].HeaderText = "Unidad";
+                    this.dataGridView1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[3].HeaderText = "Cap Empaque";
                     //dataGridView1.Columns[4].HeaderText = "Lote";
                     //dataGridView1.Columns[5].HeaderText = "Caducidad";
+                    this.dataGridView1.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[4].HeaderText = "Piezas";
+                    this.dataGridView1.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[5].HeaderText = "Tipo Caja";
+                    this.dataGridView1.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[6].HeaderText = "Cajas";
+                    this.dataGridView1.Columns[7].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[7].HeaderText = "Peso Bruto";
+                    this.dataGridView1.Columns[8].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[8].HeaderText = "Peso Cajas";
+                    this.dataGridView1.Columns[9].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[9].HeaderText = "Peso Neto";
+                    this.dataGridView1.Columns[10].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[10].HeaderText = "Peso Promedio";
+                    this.dataGridView1.Columns[11].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[11].HeaderText = "Observaciones";
 
 
@@ -363,8 +375,11 @@ namespace pruebaaccess
                     //LLENA EL GRID CON LOS RESULTADOS DE LA COLUMNA//
                     dataGridView2.DataSource = dt2;
 
+                    this.dataGridView2.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView2.Columns[0].HeaderText = "Tipo Caja";
+                    this.dataGridView2.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView2.Columns[1].HeaderText = "Cajas";
+                    this.dataGridView2.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView2.Columns[2].HeaderText = "Peso Cajas";
                 }
             }
@@ -615,9 +630,9 @@ namespace pruebaaccess
                 //cmd.CommandText = "SELECT Nombre, ApellidoPaterno FROM Agentes WHERE (((IdAgente)=[@name]));";
                 cmd.Parameters.AddWithValue("@claveencabezado", idencabezado);
                 cmd.Parameters.AddWithValue("@fechaencabezado", FechaSAPTPedidos);
-                cmd.Parameters.AddWithValue("@usuariorecibio", idAgente);
-                cmd.Parameters.AddWithValue("@usuarioentrego", idregion);
-                cmd.Parameters.AddWithValue("@usuarioentrego", idUsuario);
+                cmd.Parameters.AddWithValue("@idagente", idAgente);
+                cmd.Parameters.AddWithValue("@idregion", idregion);
+                cmd.Parameters.AddWithValue("@usuarioelabora", idUsuario);
                 cmd.Parameters.AddWithValue("@observacionesE", observacionesE);
                 cmd.ExecuteNonQuery();
                 cmd.Parameters.Clear();
@@ -1478,7 +1493,7 @@ namespace pruebaaccess
             try
             {
                 dataGridView1.Columns[1].ReadOnly = true;
-                using (OleDbConnection conect = new OleDbConnection(EmpaqueSalidas.cadConex))
+                using (OleDbConnection conect = new OleDbConnection(AgenteEntradas.cadConex))
                 {
                     if (e.ColumnIndex > -1)
                     {

@@ -385,20 +385,30 @@ namespace pruebaaccess
 
                 detalle_APT_Pedidos_SalidasDataGridView.DataSource = dt;
 
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[0].HeaderText = "Clave";
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[1].HeaderText = "Producto";
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[2].HeaderText = "Lote";
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[3].HeaderText = "Caducidad";
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[4].HeaderText = "Piezas";
                 //cmb = new DataGridViewComboBoxColumn();
                 //cmb.Name = "Tipo Caja";
 
-
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[5].HeaderText = "Tipo Caja";
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[6].HeaderText = "Cajas";
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[7].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[7].HeaderText = "Peso Bruto";
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[8].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[8].HeaderText = "Peso Cajas";
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[9].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[9].HeaderText = "Peso Neto";
+                this.detalle_APT_Pedidos_SalidasDataGridView.Columns[10].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                 detalle_APT_Pedidos_SalidasDataGridView.Columns[10].HeaderText = "Peso Promedio";
                 //detalle_APT_Pedidos_SalidasDataGridView.Data
                 

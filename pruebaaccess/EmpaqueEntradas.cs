@@ -217,17 +217,29 @@ namespace pruebaaccess
                     dataGridView1.DataSource = dt;
 
                     //ASIGNA NOMBRE A LOS ENCABEZADOS DE CADA COLUMNA//
+                    this.dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[0].HeaderText = "Clave";
+                    this.dataGridView1.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[1].HeaderText = "Producto";
+                    this.dataGridView1.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[2].HeaderText = "Lote";
+                    this.dataGridView1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[3].HeaderText = "Caducidad";
-                    dataGridView1.Columns[4].HeaderText = "Piezas";                  
+                    this.dataGridView1.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                    dataGridView1.Columns[4].HeaderText = "Piezas";
+                    this.dataGridView1.Columns[5].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[5].HeaderText = "Tipo Caja";
+                    this.dataGridView1.Columns[6].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[6].HeaderText = "Cajas";
+                    this.dataGridView1.Columns[7].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[7].HeaderText = "Peso Bruto";
+                    this.dataGridView1.Columns[8].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[8].HeaderText = "Peso Cajas";
+                    this.dataGridView1.Columns[9].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[9].HeaderText = "Peso Neto";
+                    this.dataGridView1.Columns[10].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[10].HeaderText = "Peso Promedio";
+
                     
                     //LLENA EL BINDINGNAVIGATOR//
                     bs = new BindingSource();

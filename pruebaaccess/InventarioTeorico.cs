@@ -73,9 +73,13 @@ namespace pruebaaccess
                     adapter.Fill(dt);
                     dataGridView1.DataSource = dt;
 
+                    this.dataGridView1.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[0].HeaderText = "Clave existencia";
+                    this.dataGridView1.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[1].HeaderText = "Clave producto";
+                    this.dataGridView1.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[2].HeaderText = "Nombre producto";
+                    this.dataGridView1.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
                     dataGridView1.Columns[3].HeaderText = "Inventario teorico";
 
                     bs = new BindingSource();
